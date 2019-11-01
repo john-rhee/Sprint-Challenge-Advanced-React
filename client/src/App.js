@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
+import ReactDOM from 'react-dom';
+import axios from 'axios';
 import './App.css';
+import List from './List';
+import Dashboard from './Dashboard';
 
-function App() {
+class App extends React.Component {
+  state = {
+    myData: [],
+    bData:[]
+  };
+  
+  componentDidMount() {
+    axios
+      .get('http://localhost:5000/api/players')
+      .then(response => {
+        console.log(response);
+        this.setState({
+          myData: response.data
+        });
+      })
+      .catch(error => console.log(error));
+  };
+  
+render() {  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1 data-testid ="id2" >Soccer</h1>
+       <Dashboard addOne={this.addOne} bData={this.state.bData}/>
+       {<List myData={this.state.myData} key={this.state.myData.id}/>}
     </div>
-  );
+    );
+  };
 }
 
 export default App;
